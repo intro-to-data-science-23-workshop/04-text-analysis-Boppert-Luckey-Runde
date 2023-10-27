@@ -27,6 +27,7 @@ The primary goal of this tutorial is to introduce students to the `stringr` and 
 - [stringr Cheat Sheet](https://dplyr.tidyverse.org/)
 - [Data-Quest course on string processing](https://www.dataquest.io/course/r-data-cleaning-advanced/)
 - [R for Data Science book - part on string processing](https://r4ds.had.co.nz/wrangle-intro.html)
+- [Mastering Regular Expressions](https://www.oreilly.com/library/view/mastering-regular-expressions/0596528124/) -- Jackson cannot recommend this book enough
   
 ## License
 
