@@ -18,9 +18,9 @@ The primary goal of this tutorial is to introduce students to the `stringr` and 
 
 ## Instructors
 
-- Daniel Boppert ([LinkedIn](https://www.linkedin.com/in/daniel-boppert-93a561184/), [GitHub]((https://github.com/bprtdaniel))
-- Miriam Runde ([LinkedIn](https://www.linkedin.com/in/miriamrunde/), [GitHub]((https://github.com/MiriamRunde))
-- Jackson Luckey ([LinkedIn](https://www.linkedin.com/in/jacksonmluckey/), [GitHub]((https://github.com/jacksonmluckey))
+- Daniel Boppert ([LinkedIn](https://www.linkedin.com/in/daniel-boppert-93a561184/), [GitHub](https://github.com/bprtdaniel))
+- Miriam Runde ([LinkedIn](https://www.linkedin.com/in/miriamrunde/), [GitHub](https://github.com/MiriamRunde))
+- Jackson Luckey ([LinkedIn](https://www.linkedin.com/in/jacksonmluckey/), [GitHub](https://github.com/jacksonmluckey))
 
 
 ## Further resources
@@ -37,6 +37,6 @@ The material in this repository is made available under the [MIT license](http:/
 
 **Daniel Boppert** prepared the RMD presentation, parts of the session contents, and one-half of the recording.
 
-**Miriam Runde** prepared the practice material (Beginner and Intermediate), parts of the session contents, and the other half of the recording. 
+**Miriam Runde** prepared part of the practice material (Beginner and Intermediate), parts of the session contents, and the other half of the recording. 
 
-**Jackson Luckey** prepared a part of the practice material (advanced) and the [the alternative presentation, which contains more .
+**Jackson Luckey** prepared a part of the practice material (Advanced) and miscellanious components (two versions of the exercises, first draft of alternative presentation).
