@@ -9,7 +9,7 @@ This repository provides materials for a session that is part of the [I2DS Tools
 
 - [Slides](https://github.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/blob/main/presentation.html)
 - [Exercises](https://github.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/blob/main/stringr_stringi_exercises.html)
-- [Slides](https://github.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/blob/main/stringr_stringi_exercises_with_solutions.html)
+- [Exercises With Solutions](https://github.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/blob/main/stringr_stringi_exercises_with_solutions.html)
 
 ### Main learning objectives
 
