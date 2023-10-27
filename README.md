@@ -39,4 +39,4 @@ The material in this repository is made available under the [MIT license](http:/
 
 **Miriam Runde** prepared part of the practice material (Beginner and Intermediate), parts of the session contents, and the other half of the recording. 
 
-**Jackson Luckey** prepared a part of the practice material (Advanced) and miscellanious components (two versions of the exercises, first draft of alternative presentation).
+**Jackson Luckey** prepared a part of the practice material (Advanced) and miscellaneous components (exercises with and without solutions, first draft of alternative presentation).
