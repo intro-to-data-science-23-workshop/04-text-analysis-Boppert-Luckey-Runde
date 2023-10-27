@@ -18,8 +18,8 @@ The primary goal of this tutorial is to introduce students to the `stringr` and 
 
 ## Instructors
 
-- Daniel Boppert ([LinkedIn](https://www.linkedin.com/in/daniel-boppert-93a561184/), [GitHub]((https://github.com/bprtdaniel))
-- Miriam Runde ([LinkedIn](https://www.linkedin.com/in/miriamrunde/), [GitHub]((https://github.com/MiriamRunde))
+- Daniel Boppert [LinkedIn](https://www.linkedin.com/in/daniel-boppert-93a561184/), [GitHub](https://github.com/bprtdaniel))
+- Miriam Runde [LinkedIn](https://www.linkedin.com/in/miriamrunde/), [GitHub]((https://github.com/MiriamRunde))
 - Jackson Luckey ([LinkedIn](https://www.linkedin.com/in/jacksonmluckey/), [GitHub]((https://github.com/jacksonmluckey))
 
 
