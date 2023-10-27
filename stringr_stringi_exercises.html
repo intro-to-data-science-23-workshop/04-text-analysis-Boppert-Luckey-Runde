@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jackson Luckey, Miriam Runde, Daniel Boppert" />
+
+
+<title>String processing in R</title>
+
+<script src="stringr_stringi_exercises_files/header-attrs-2.24/header-attrs.js"></script>
+<script src="stringr_stringi_exercises_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="stringr_stringi_exercises_files/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="stringr_stringi_exercises_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="stringr_stringi_exercises_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="stringr_stringi_exercises_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="stringr_stringi_exercises_files/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="stringr_stringi_exercises_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="stringr_stringi_exercises_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="stringr_stringi_exercises_files/navigation-1.1/tabsets.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">String processing in R</h1>
+<h3 class="subtitle">The packages <strong>stringr and
+stringi</strong></h3>
+<h4 class="author">Jackson Luckey, Miriam Runde, Daniel Boppert</h4>
+<h4 class="date">2023-10-30 (updated: 2023-10-27)</h4>
+
+</div>
+
+
+<div id="welcome-to-our-workshop" class="section level1">
+<h1>Welcome to our workshop! 👋</h1>
+<p>Lets do some string manipulation together!</p>
+<div id="notes-on-the-practice-sheet" class="section level2">
+<h2>Notes on the practice sheet</h2>
+<p>Make sure to load the <strong>stringr</strong>,
+<strong>stringi</strong> and the <strong>regex</strong> package.</p>
+<p>We are going through different levels of difficulty in string
+manipulation.<br />
+The first exercises will consist of straight forward application of some
+of the main functions of the <strong>stringr</strong> and the
+<strong>stringi</strong> package.<br />
+In the medium level, we will deal with more complex tasks that involve
+string manipulation.<br />
+The advanced exercises include the use of Regex expression. 😱</p>
+</div>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<div id="beginner-exercises" class="section level3">
+<h3>Beginner exercises 🤓</h3>
+<p><strong>Exercise 1</strong>: Create two string vectors that say
+“Today I am gonna learn how to process strings.” &amp; “This will be a
+lot of fun!” 😊</p>
+<p><strong>Exercise 2</strong>: Please extract the component “Science”
+out of the string “Data Science”. 💻</p>
+<p><strong>Exercise 3</strong>: Count the characters in your string from
+exercise 1.</p>
+<p><strong>Exercise 4</strong>: Please add the first and the second
+string from exercise 1 together. Be minjob_dataul about the whitespace
+behind the first senctence.</p>
+<p><strong>Exercise 5</strong>: For some task, we need all the
+characters to be in lowercase - for example, if we want to count
+specific words and do not want to include the lower- and the uppercase
+version of a specific word. From now on, please use the lower case
+version of our motto.</p>
+<p><strong>Exercise 6</strong>: Check if the word “horror” is in the
+each of the concatenated string. Do it for “fun” also. 😎</p>
+<p><strong>Exercise 7</strong>: Not everyone thinks that string
+processing is “a lot of” fun. Create a motto for these people (using
+str_replace).</p>
+<p><strong>Exercise 8</strong>: We want to extract the first word of our
+motto.</p>
+<p><strong>Exercise 9</strong>: We want to count how many vowels are
+there in our motto.</p>
+<p><strong>Exercise 10</strong>: Consider the following case - all
+strings must have. the width of 100 characters. Find out how long our
+string is and then pad our motto to the necessary length.</p>
+</div>
+<div id="medium-difficulty-exercises" class="section level3">
+<h3>Medium difficulty exercises 🦊</h3>
+<p>In this part, we will show how to create a function with stringr and
+stringi. Creating a function for string processing can be helpful if you
+want to execute the same manipulation on a lot of different character
+vectors, for example tweets or sentences in a sentiment analysis. 🕊. The
+rest of the exercises the manipulation and analysis of webscraped data
+from Wikipedia.💬</p>
+<p><strong>Exercise 11</strong>: We want to create a function that
+counts the words in a sentence, a paragraph or, for example, a tweet.
+Think about this: Do you want to include punctuation? And if not, how
+can we make sure these signs are not counted? Make sure to try out the
+function with our motto from the beginner exercises.</p>
+<div id="webscraping-exercises" class="section level4">
+<h4>Webscraping exercises</h4>
+<p>For thes following exercises, we first need some strings we can
+process. We prepared a short scraping code to get data from a Wikipedia
+page. Please run the code - then we can start with the string
+processing.</p>
+<p><strong>Webscraper</strong></p>
+<p><strong>Exercise 12</strong>: We are only interested in any
+information about the moon that includes numbers - the size, the
+thickness, anything related to numbers. How can we do that with the
+stringr package?</p>
+<p><strong>Hint</strong>: What do we see when we take a look at the
+paragraph? The string vector also contains the reference numbers ([89],
+[99]). 😭.<br />
+If we want to extract only the sentences that contain numerical
+information about the moon, we need to get rid of the reference
+numbers.</p>
+<p><strong>Exercise 13</strong>: For this exercise, we are interested in
+the length of the different words in the paragraph to proof that science
+word are super long 😲!<br />
+<strong>Hint</strong>: The filler worlds “the, a, and” are slowing down
+any further operations. Let’s get rid of them before we are performing
+the length analysis. 💁</p>
+</div>
+</div>
+<div id="advanced-exercise" class="section level3">
+<h3>Advanced Exercise 💥</h3>
+<p>Imagine you are are a new data science intern at a economic research
+institute. The institute has historical data on names, job titles, and
+employers. The records are stored in an inconsistent format that looks
+like sentences. The institute would like to extract the names, job
+titles, and employers in order to investigate the relationship between
+terminal degrees, job titles, and employers.</p>
+<p>Data on employee names, positions, and employers are saved in the
+following format:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">head</span>(job_strings)</span></code></pre></div>
+<pre><code>## [1] &quot;Yandel Erdman is employed as a Clinical biochemist at Jakubowski-Jakubowski&quot;    
+## [2] &quot;Dr. Garland Zboncak is employed as a Public librarian at Sanford-Sanford&quot;       
+## [3] &quot;Sanford-Sanford employs Kelsie Zieme as a Pilot, airline&quot;                       
+## [4] &quot;Dwain Nicolas-Considine is employed as a Broadcast presenter at Sanford-Sanford&quot;
+## [5] &quot;Wuckert Inc employs Con Koch as a Editor, commissioning&quot;                        
+## [6] &quot;Tiera Hauck works as a Seismic interpreter at Olson, Olson and Olson&quot;</code></pre>
+<p><strong>Exercise 1</strong></p>
+<p>There are three formats that the data is written in. Please write
+regular expressions to identify rows that match each format. Make sure
+your regexes do not match other formats as well.</p>
+<p><strong>Hint</strong></p>
+<p>When simulating the data, I used the following formats:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>formats <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;{name} is employed as a {job} at {company}&quot;</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>             <span class="st">&quot;{company} employs {name} as a {job}&quot;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>             <span class="st">&quot;{name} works as a {job} at {company}&quot;</span>)</span></code></pre></div>
+<p><strong>Exercise 2</strong></p>
+<p>Now write code that takes a dataframe <code>job_data</code> with the
+column <code>job_strings</code> and creates a column <code>format</code>
+to identify which format the row uses.</p>
+<hr />
+<p><strong>Exercise 3</strong></p>
+<p>Now that we know the format of each line, we can write regular
+expressions to extract the name from each format.</p>
+<p>Let’s start with the first format:</p>
+<p><code>{name} is employed as a {job} at {company}</code></p>
+<p>How can we extract job?</p>
+<p><strong>Exercise 4</strong></p>
+<p>Now write code that does the same thing for all three formats stored
+in <code>job_data$job_strings</code>.</p>
+<p><strong>Exercise 5</strong></p>
+<p>Terminal degrees are included at the end of the name of
+individuals.</p>
+<p>Therefore, we should start by extracting the names from
+<code>job_strings</code>.</p>
+<p><strong>Exercise 6</strong></p>
+<p>What regular expression could be used to identify terminal degrees
+(PhD, ScD, MD, DDS, DVM) in <code>name</code>?</p>
+<p><strong>Hint</strong></p>
+<p>You can create groups in regular expressions using parenthesis and
+use <code>|</code> as an <code>OR</code> operator.</p>
+<p><strong>Exercise 7</strong></p>
+<p>Now let’s find the most common jobs held by people with advanced
+degrees.</p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

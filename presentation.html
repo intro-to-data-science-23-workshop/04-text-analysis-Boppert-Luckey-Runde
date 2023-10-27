@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>String Manipulation with stringr and stringi</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Daniel Boppert" />
+    <meta name="author" content="Jackson Luckey" />
+    <meta name="author" content="Miriam Runde" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# <strong>String Manipulation</strong> with stringr and stringi
+]
+.subtitle[
+## Live Workshop Session
+]
+.author[
+### Daniel Boppert
+]
+.author[
+### Jackson Luckey
+]
+.author[
+### Miriam Runde
+]
+.institute[
+### <strong>Hertie School of Governance, Berlin</strong>
+]
+.date[
+### 2022/10/30 (updated: 2023-10-27)
+]
+
+---
+
+
+
+
+# Our Aim for Today
+
+--
+
+1. String Recap, Text data
+
+--
+
+1. stringr and stringi
+
+--
+
+1. stringr deepdive
+
+--
+
+1. stringr and Regular expression
+
+--
+
+1. Reasons to use stringi
+
+--
+
+1. Further Resources
+
+---
+# Text data in social science research
+
+&lt;img src = "images/text_data.png" style="display: block; margin: auto;" width = "50%" /&gt;
+
+--
+
+WZB conducting research on [party manifestos](https://wzb.eu/de/forschung/werkstatt-wahlen-am-wzb/manifesto-monday).
+
+--
+
+GESIS projects on text [data mining](https://www.gesis.org/en/research/applied-computer-science/text-and-data-mining).
+
+--
+
+Twitter [research projects](https://arxiv.org/abs/2301.11429).
+
+--
+
+Hertie students scraping all Bundestag speeches, crashing the website (allegedly!).
+
+
+---
+class: inverse, center, middle
+
+# What's a string?
+
+---
+
+# Quick Recap: What's a string?
+
+We use strings to present text data:
+--
+
+
+```r
+string &lt;- "Text Data"
+```
+A very literal, yet true example.
+
+--
+
+Strings are made up of characters, defined via single or double quotes and contain any text you want: 
+
+&lt;img src = "https://upload.wikimedia.org/wikipedia/commons/6/6b/String_example.png" width="200"&gt;
+
+--
+
+We can also store multiple strings in a vector:
+
+```r
+c("Strings", "are", "great")
+#&gt; [1] "Strings"   "are"   "great"
+```
+Using tools like `grep()` and Regular Expressions, we can do a lot of string manipulation.
+
+---
+
+# So, I handle strings in base R then?
+
+--
+&lt;img src = "https://en.meming.world/images/en/f/f7/Well_Yes%2C_But_Actually_No.jpg" style="display: block; margin: auto;" width = "300"&gt;
+--
+
+
+Base R can be way too challenging in handling strings, especially on a larger scale:
+--
+
+
+We all know (and love) Regular Expressions, which is why we all immediately know what this line does:
+--
+
+
+
+```r
+gsub("\\.[a-zA-Z]{2,}$", "", gsub("^.+@", "", emails[grep("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}", emails)]))
+```
+--
+
+Great, me too! We can **quickly** see, this gsub intends to extract the domain of valid email addresses from a given input vector of strings:
+
+```r
+emails &lt;- c("jackson@MacBook", "jackson@students.hertie-school.org", "jackson", "jacksonmluckey@gmail.com", "lazy dog", "jackson@icloud.com")
+```
+
+---
+# stringr | stringi
+This is where our packages enter the game.
+
+--
+
+.pull-left[
+&lt;img src="images/stringr_logo.png" width="30%" /&gt;
+
+- Part of the tidyverse, very intuitive use.
+
+- Delivers many basic functions to extract, manipulate, subset, measure etc. string data.
+
+- Easily identifiable via `str_`.
+
+- Built on top of `stringi`.
+]
+
+--
+
+.pull-right[
+&lt;img src = "images/stringi_logo.png" width = "35%" /&gt;
+
+- More configurable and more than `stringr`.
+
+- Can handle more complex tasks.
+
+- Better for locale-specific conditions, such as language or time.
+
+- Generally starts with `stri_`.
+]
+---
+#stringr deep-dive
+
+.pull-left[
+&lt;img src="images/str_detect.png" width="15%" /&gt;
+
+We can use `str_detect()` to identify patterns.
+
+**Example**: In academic research, you might want to extract references or citations from a body of text for further analysis. Detecting and extracting patterns like DOI (Digital Object Identifier) or citation styles can be crucial.
+
+
+&lt;img src="images/str_subset.png" width="15%" /&gt;
+
+Use `str_subset()` on a user-defined pattern.
+
+**Example**: When working with survey data, you might want to extract specific responses or categories from open-ended questions.
+]
+
+.pull-right[
+&lt;img src="images/str_pad.png" width="15%" /&gt;
+
+Use `str_pad()` if you want to pad strings to a consistent length.
+
+**Example**: You're working on a sentiment analysis project, using a bag-of-words approach to convert text data into numerical features.
+
+&lt;img src="images/str_replace.png" width="15%" /&gt;
+
+`str_replace()` to replace all matched patterns in a string.
+
+**Example**: You're analyzing a dataset of tweets or social media posts, and you want to anonymize certain information, such as usernames or email addresses for privacy reasons.
+]
+---
+#Stringr deep-dive __||__
+&lt;img src="images/str_c.png" width="15%" /&gt;
+
+`str_c()` to join multiple strings into one.
+
+**Example**: You've finalized a data analysis project and want to generate a report that includes text descriptions along with dynamically generated values from your analysis.
+
+--
+
+&lt;img src="images/str_sort.png" width="15%" /&gt;
+
+`str_sort()` to sort strings alphabetically.
+
+**Example**: You're working on a project, using a data set with categorical variables, such as product categories or similar. You want to sort the categories alphabetically for better visualization and analysis.
+
+---
+#Stringr and Regular Expressions
+
+The power of `stringr` comes alive when **combined** with Regular Expressions.
+
+--
+
+
+```r
+string &lt;- "It's not a bug – it's a feature."
+str_extract_all(string, "\\b\\w+\\b")
+[1] "It"      "s"       "not"     "a"       "bug"     "it"     
+[7] "s"       "a"       "feature"
+```
+This is very useful in Tokenized Natural Language Processing. Extracting single strings to separate between 'filler words' and those relevant to the research question.
+
+--
+
+For all text analyses projects, we have to clean the data to a certain extent, combining `stringr` and Regular Expressions can serve a great purpose, for example in standardizing data.
+
+--
+
+
+```r
+replacements &lt;- c("USA" = "United States", "UK" = "United Kingdom")
+data$text_column &lt;- str_replace_all(data$text_column, replacements)
+```
+
+
+---
+#Reasons to use stringi
+
+--
+
+`stringi` has extensive support for [Unicode](https://home.unicode.org/), which makes it suitable for text-processing in basically any language.
+
+--
+
+It can switch between different locales, which is important when handling internationally sourced data.
+
+--
+
+`stringi` is the package `stringr` is built on top of and is highly specific in its use-cases.
+
+If you cannot find a way to do the specific manipulation that you want to with `stringr` consider some additional [stringi resources](https://www.rdocumentation.org/packages/stringi/versions/1.7.12).
+
+--
+
+However, for most of your everyday string-manipulation and data cleaning tasks, we recommend using `stringr`, as it's more intuitive ans straight forward.
+
+&lt;img src = "images/stringr_meme.png" style="display: block; margin: auto;" width = "30%" /&gt;
+
+---
+#Further Resources
+.pull-left[
+&lt;img src="images/cheatsheet_1.png" width="90%" /&gt;
+]
+
+.pull-right[
+&lt;img src="images/cheatsheet_2.png" width="90%" /&gt;
+]
+
+Test your RegEx knowledge [here](https://regex101.com/).
+
+Additional Resources on RegEx and general [String Manipulation](https://github.com/ziishaned/learn-regex) and [specific classes.](https://www.dataquest.io/course/r-data-cleaning-advanced/)
+
+---
+Image Credits:
+
+- [String Example](https://upload.wikimedia.org/wikipedia/commons/6/6b/String_example.png)
+
+- [Well Yes, but actually No](https://en.meming.world/images/en/f/f7/Well_Yes%2C_But_Actually_No.jpg)
+
+- [Text Data](https://www.ontotext.com/blog/text-mining-graph-databases-work-well-together/)
+
+- [Stringr logo](https://stringr.tidyverse.org/)
+
+- [Stringi logo](https://www.gagolewski.com/software.html)
+
+- [Stringr Cheatsheet](https://github.com/rstudio/cheatsheets/blob/main/strings.pdf)
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"hash": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+<style>
+  .logo {
+    background-image: url(https://upload.wikimedia.org/wikipedia/commons/2/23/Hertie_School_of_Governance_logo.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 1.5em;
+    right: 1em;
+    width: 200px;
+    height: 128px;
+    z-index: 0;
+  }
+</style>
+  
+  <script>
+  document
+.querySelectorAll(
+  '.remark-slide-content' +
+    ':not(.title-slide)' +
+    // add additional classes to exclude here, e.g.
+  // ':not(.inverse)' +
+    ':not(.hide-logo)'
+)
+.forEach(el => {
+  el.innerHTML += '<div class="logo"></div>';
+});
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
