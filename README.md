@@ -7,10 +7,13 @@ This repository provides materials for a session that is part of the [I2DS Tools
 
 ### Session contents
 
-
+- [Slides](https://github.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/blob/main/presentation.html)
+- [Exercises](https://github.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/blob/main/stringr_stringi_exercises.html)
+- [Slides](https://github.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/blob/main/stringr_stringi_exercises_with_solutions.html)
 
 ### Main learning objectives
 
+The primary goal of this tutorial is to introduce students to the `stringr` and `stringi` packages and practice processing text data. We will start by doing an overview of text data in R, and then move onto comparing `stringr` to `stringi`. We will then work through some exercises to get practice with `stringr`.
 
 
 ## Instructors
@@ -36,4 +39,4 @@ The material in this repository is made available under the [MIT license](http:/
 
 **Miriam Runde** prepared the practice material (Beginner and Intermediate), parts of the session contents, and the other half of the recording. 
 
-**Jackson Luckey** prepared a part of the practice material (advanced) and the alternative presentation.
+**Jackson Luckey** prepared a part of the practice material (advanced) and the [the alternative presentation, which contains more .
