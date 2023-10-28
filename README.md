@@ -8,8 +8,10 @@ This repository provides materials for a session that is part of the [I2DS Tools
 ### Session contents
 
 - [Slides](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/presentation.html)
-- [Exercises](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/stringr_stringi_exercises_with_solutions.html)
-- [Exercises With Solutions](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/stringr_stringi_exercises_with_solutions.html)
+- [Workshop Exercsise](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/workshop_exercises.htlm))
+- [Workshop Exercsise with solution](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/workshop_exercises_with_solutions.htlm)
+- [Learning Material](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/stringr_stringi_exercises_with_solutions.html)
+- [Learning Material with Solutions](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/stringr_stringi_exercises_with_solutions.html)
 
 ### Main learning objectives
 
