@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jackson Luckey, Miriam Runde, Daniel Boppert" />
+
+
+<title>String processing in R</title>
+
+<script src="additional_exercises_with_solutions_files/header-attrs-2.24/header-attrs.js"></script>
+<script src="additional_exercises_with_solutions_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="additional_exercises_with_solutions_files/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="additional_exercises_with_solutions_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="additional_exercises_with_solutions_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="additional_exercises_with_solutions_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="additional_exercises_with_solutions_files/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="additional_exercises_with_solutions_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="additional_exercises_with_solutions_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="additional_exercises_with_solutions_files/navigation-1.1/tabsets.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">String processing in R</h1>
+<h3 class="subtitle">The packages <strong>stringr and
+stringi</strong></h3>
+<h4 class="author">Jackson Luckey, Miriam Runde, Daniel Boppert</h4>
+<h4 class="date">2023-10-30 (updated: 2023-10-28)</h4>
+
+</div>
+
+
+<div id="welcome-to-our-workshop" class="section level1">
+<h1>Welcome to our workshop! 👋</h1>
+<p>Lets do some string manipulation together!</p>
+<div id="notes-on-the-practice-sheet" class="section level2">
+<h2>Notes on the practice sheet</h2>
+<p>Make sure to load the <code>stringr</code> and <code>stringi</code>
+packages. We are going through different levels of difficulty in string
+manipulation.<br />
+The first exercises will consist of straight forward application of some
+of the main functions of the <strong>stringr</strong> and the
+<strong>stringi</strong> package.<br />
+In the medium level, we will deal with more complex tasks that involve
+string manipulation.<br />
+The advanced exercises include the use of Regex expression. 🤯</p>
+</div>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<div id="beginner-exercises" class="section level3">
+<h3>Beginner exercises 🤓</h3>
+<p><strong>Exercise 1</strong>: Create two string vectors that say
+“Today I am gonna learn how to process strings.” &amp; “This will be a
+lot of fun!” 😊</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>my_string <span class="ot">&lt;-</span> <span class="st">&quot;Today I am gonna learn how to process strings.&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>my_string2 <span class="ot">&lt;-</span> <span class="st">&quot;This will be a lot of fun!&quot;</span></span></code></pre></div>
+<p><strong>Exercise 2</strong>: Please extract the component “Science”
+out of the string “Data Science”. 💻</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>ds_str <span class="ot">&lt;-</span> <span class="st">&quot;Data Science&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#way 1</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>result_2 <span class="ot">&lt;-</span> <span class="fu">str_sub</span>(<span class="st">&quot;DataScience&quot;</span>, <span class="at">start =</span> <span class="dv">5</span>, <span class="at">end =</span> <span class="dv">11</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#way 2</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>result_2 <span class="ot">&lt;-</span> <span class="fu">str_extract</span>(ds_str, <span class="st">&quot;Science&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>result_2</span></code></pre></div>
+<pre><code>## [1] &quot;Science&quot;</code></pre>
+<p><strong>Exercise 3</strong>: Count the characters in your string from
+exercise 1.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>result_3 <span class="ot">&lt;-</span> <span class="fu">str_length</span>(my_string)  </span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>result_3</span></code></pre></div>
+<pre><code>## [1] 46</code></pre>
+<p><strong>Exercise 4</strong>: Please add the first and the second
+string from exercise 1 together. Be minjob_dataul about the whitespace
+behind the first senctence.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>todays_motto<span class="ot">&lt;-</span> <span class="fu">str_c</span>(my_string, <span class="st">&quot; &quot;</span>, my_string2)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>todays_motto</span></code></pre></div>
+<pre><code>## [1] &quot;Today I am gonna learn how to process strings. This will be a lot of fun!&quot;</code></pre>
+<p><strong>Exercise 5</strong>: For some task, we need all the
+characters to be in lowercase - for example, if we want to count
+specific words and do not want to include the lower- and the uppercase
+version of a specific word. From now on, please use the lower case
+version of our motto.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>todays_motto_lc <span class="ot">&lt;-</span> <span class="fu">str_to_lower</span>(todays_motto)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>todays_motto_lc</span></code></pre></div>
+<pre><code>## [1] &quot;today i am gonna learn how to process strings. this will be a lot of fun!&quot;</code></pre>
+<p><strong>Exercise 6</strong>: Check if the word “horror” is in the
+each of the concatenated string. Do it for “fun” also. 😎</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">str_detect</span>(todays_motto_lc, <span class="st">&quot;horror&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">#As you see, the function does not detect any horror in todays motto. </span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">str_detect</span>(todays_motto_lc, <span class="st">&quot;fun&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co">#It just detects fun!</span></span></code></pre></div>
+<p><strong>Exercise 7</strong>: Not everyone thinks that string
+processing is “a lot of” fun. Create a motto for these people (using
+str_replace).</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>fake_motto <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(todays_motto_lc, <span class="st">&quot;a lot of&quot;</span>, <span class="st">&quot;no&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>fake_motto</span></code></pre></div>
+<pre><code>## [1] &quot;today i am gonna learn how to process strings. this will be no fun!&quot;</code></pre>
+<p><strong>Exercise 8</strong>: We want to extract the first word of our
+motto.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>first_word <span class="ot">&lt;-</span> <span class="fu">str_extract</span>(todays_motto_lc, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">w+&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>first_word <span class="co"># Extract first word</span></span></code></pre></div>
+<pre><code>## [1] &quot;today&quot;</code></pre>
+<p><strong>Exercise 9</strong>: We want to count how many vowels are
+there in our motto.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>vowel_pattern <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;e&quot;</span>,<span class="st">&quot;o&quot;</span>,<span class="st">&quot;u&quot;</span>,<span class="st">&quot;i&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>vowel_count <span class="ot">&lt;-</span> vowel_count <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">str_detect</span>(todays_motto_lc, vowel_pattern))</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>vowel_count</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p><strong>Exercise 10</strong>: Consider the following case - all
+strings must have a width of 100 characters. Find out how long our
+string is and then pad our motto to the necessary length.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>padded_string <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(todays_motto_lc, <span class="at">width =</span> <span class="dv">100</span>, <span class="at">side =</span> <span class="st">&quot;right&quot;</span>, <span class="at">pad =</span> <span class="st">&quot;0&quot;</span>) </span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>padded_string </span></code></pre></div>
+<pre><code>## [1] &quot;today i am gonna learn how to process strings. this will be a lot of fun!000000000000000000000000000&quot;</code></pre>
+</div>
+<div id="medium-difficulty-exercises" class="section level3">
+<h3>Medium difficulty exercises 🦊</h3>
+<p>In this part, we will show how to create a function with stringr and
+stringi. Creating a function for string processing can be helpful if you
+want to execute the same manipulation on a lot of different character
+vectors, for example tweets or sentences in a sentiment analysis. 🕊. The
+rest of the exercises the manipulation and analysis of webscraped data
+from Wikipedia.💬</p>
+<p><strong>Exercise 11</strong>: We want to create a function that
+counts the words in a sentence, a paragraph or, for example, a tweet.
+Think about this: Do you want to include punctuation? And if not, how
+can we make sure these signs are not counted? Make sure to try out the
+function with our motto from the beginner exercises.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>word_frequency <span class="ot">&lt;-</span> <span class="cf">function</span>(sentence) {</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>  sentence <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(sentence, <span class="st">&quot;[[:punct:]]&quot;</span>, <span class="st">&quot;&quot;</span>) <span class="co">#exclude any kind of punctuation </span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>  words <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">str_split</span>(sentence, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">s+&quot;</span>))</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>  <span class="fu">table</span>(words)</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>}</span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="co"># Example usage</span></span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">word_frequency</span>(todays_motto_lc)</span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>result</span></code></pre></div>
+<pre><code>## words
+##       a      am      be     fun   gonna     how       i   learn     lot      of process strings    this 
+##       1       1       1       1       1       1       1       1       1       1       1       1       1 
+##      to   today    will 
+##       1       1       1</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># If you ever do this in real life, consider using the `tokenizers` package from ropensci. A lot of effort has gone into being able to consistently perform this particular operation.</span></span></code></pre></div>
+<div id="webscraping-exercises" class="section level4">
+<h4>Webscraping exercises</h4>
+<p>For thes following exercises, we first need some strings we can
+process. We prepared a short scraping code to get data from a Wikipedia
+page. Please run the code - then we can start with the string
+processing.</p>
+<p><strong>Webscraper</strong></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>moon_url <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">&quot;https://en.wikipedia.org/wiki/Moon&quot;</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>moon_facts <span class="ot">&lt;-</span> moon_url <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="at">xpath =</span> <span class="st">&#39;//p[(((count(preceding-sibling::*) + 1) = 55) and parent::*)] | //p[(((count(preceding-sibling::*) + 1) = 74) and parent::*)] | //p[(((count(preceding-sibling::*) + 1) = 73) and parent::*)] | //p[(((count(preceding-sibling::*) + 1) = 72) and parent::*)]&#39;</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>  <span class="fu">html_text</span>()</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>  </span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="fu">print</span>(moon_facts)</span></code></pre></div>
+<pre><code>## [1] &quot;Crystallization of this magma ocean would have created a mafic mantle from the precipitation and sinking of the minerals olivine, clinopyroxene, and orthopyroxene; after about three-quarters of the magma ocean had crystallized, lower-density plagioclase minerals could form and float into a crust atop.[73] The final liquids to crystallize would have been initially sandwiched between the crust and mantle, with a high abundance of incompatible and heat-producing elements.[1] Consistent with this perspective, geochemical mapping made from orbit suggests a crust of mostly anorthosite.[16] The Moon rock samples of the flood lavas that erupted onto the surface from partial melting in the mantle confirm the mafic mantle composition, which is more iron-rich than that of Earth.[1] The crust is on average about 50 kilometres (31 mi) thick.[1]&quot;</code></pre>
+<p><strong>Exercise 12</strong>: We are only interested in any
+information about the moon that includes numbers - the size, the
+thickness, anything related to numbers. How can we do that with the
+stringr package?</p>
+<p><strong>Hint</strong>: What do we see when we take a look at the
+paragraph? The string vector also contains the reference numbers ([89],
+[99]). 🙍.<br />
+If we want to extract only the sentences that contain numerical
+information about the moon, we need to get rid of the reference
+numbers.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>moon_facts_clean <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(moon_facts, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">[</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">]&quot;</span>, <span class="st">&quot;&quot;</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>moon_facts_clean</span></code></pre></div>
+<pre><code>## [1] &quot;Crystallization of this magma ocean would have created a mafic mantle from the precipitation and sinking of the minerals olivine, clinopyroxene, and orthopyroxene; after about three-quarters of the magma ocean had crystallized, lower-density plagioclase minerals could form and float into a crust atop. The final liquids to crystallize would have been initially sandwiched between the crust and mantle, with a high abundance of incompatible and heat-producing elements. Consistent with this perspective, geochemical mapping made from orbit suggests a crust of mostly anorthosite. The Moon rock samples of the flood lavas that erupted onto the surface from partial melting in the mantle confirm the mafic mantle composition, which is more iron-rich than that of Earth. The crust is on average about 50 kilometres (31 mi) thick.&quot;</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co">#subset all sentences that contain numerical info</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>sentences_with_numbers <span class="ot">&lt;-</span> <span class="fu">str_subset</span>(<span class="fu">unlist</span>(<span class="fu">str_split</span>(moon_facts_clean, <span class="st">&quot;(?&lt;=</span><span class="sc">\\</span><span class="st">.)</span><span class="sc">\\</span><span class="st">s+&quot;</span>)), <span class="st">&quot;</span><span class="sc">\\</span><span class="st">d+&quot;</span>) </span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>sentences_with_numbers</span></code></pre></div>
+<pre><code>## [1] &quot;The crust is on average about 50 kilometres (31 mi) thick.&quot;</code></pre>
+<p><strong>Exercise 13</strong>: For this exercise, we are interested in
+the length of the different words in the paragraph to proof that science
+word are super long 😱!<br />
+<strong>Hint</strong>: The filler worlds “the, a, and” are slowing down
+any further operations. Let’s get rid of them before we are performing
+the length analysis. 💁</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>filler_words <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;of&quot;</span>, <span class="st">&quot;and&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;the&quot;</span>, <span class="st">&quot;in&quot;</span>, <span class="st">&quot;is&quot;</span>, <span class="st">&quot;with&quot;</span>, <span class="st">&quot;from&quot;</span>, <span class="st">&quot;into&quot;</span>, <span class="st">&quot;this&quot;</span>, <span class="st">&quot;after&quot;</span>, <span class="st">&quot;to&quot;</span>, <span class="st">&quot;would&quot;</span>, <span class="st">&quot;have&quot;</span>, <span class="st">&quot;The&quot;</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a>pattern <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">b(&quot;</span>, <span class="fu">paste</span>(filler_words, <span class="at">collapse =</span> <span class="st">&quot;|&quot;</span>), <span class="st">&quot;)</span><span class="sc">\\</span><span class="st">b&quot;</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a>cleaned_text <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(moon_facts_clean, pattern, <span class="st">&quot;&quot;</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a><span class="co"># Trim the resultant strings to get rid of any additional spaces</span></span>
+<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a>cleaned_text <span class="ot">&lt;-</span> <span class="fu">str_trim</span>(<span class="fu">str_replace_all</span>(cleaned_text, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">s+&quot;</span>, <span class="st">&quot; &quot;</span>))</span>
+<span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" tabindex="-1"></a>cleaned_text</span></code></pre></div>
+<pre><code>## [1] &quot;Crystallization magma ocean created mafic mantle precipitation sinking minerals olivine, clinopyroxene, orthopyroxene; about three-quarters magma ocean had crystallized, lower-density plagioclase minerals could form float crust atop. final liquids crystallize been initially sandwiched between crust mantle, high abundance incompatible heat-producing elements. Consistent perspective, geochemical mapping made orbit suggests crust mostly anorthosite. Moon rock samples flood lavas that erupted onto surface partial melting mantle confirm mafic mantle composition, which more iron-rich than that Earth. crust on average about 50 kilometres (31 mi) thick.&quot;</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>cleaned_text_split <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">str_split</span>(cleaned_text, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">s+&quot;</span>))</span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>strings_length <span class="ot">&lt;-</span> <span class="fu">str_length</span>(cleaned_text_split)</span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a>lengths <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Word =</span> cleaned_text_split, <span class="at">Length =</span> strings_length)</span>
+<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a>result <span class="ot">&lt;-</span> lengths <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(Length))</span>
+<span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a>result</span></code></pre></div>
+<pre><code>##               Word Length
+## 1  Crystallization     15
+## 2   clinopyroxene,     14
+## 3   orthopyroxene;     14
+## 4   three-quarters     14
+## 5   heat-producing     14
+## 6    precipitation     13
+## 7    crystallized,     13
+## 8    lower-density     13
+## 9     incompatible     12
+## 10    perspective,     12
+## 11    anorthosite.     12
+## 12    composition,     12
+## 13     plagioclase     11
+## 14     crystallize     11
+## 15     geochemical     11
+## 16      sandwiched     10
+## 17      Consistent     10
+## 18      kilometres     10
+## 19       initially      9
+## 20       abundance      9
+## 21       elements.      9
+## 22       iron-rich      9
+## 23        minerals      8
+## 24        olivine,      8
+## 25        minerals      8
+## 26        suggests      8
+## 27         created      7
+## 28         sinking      7
+## 29         liquids      7
+## 30         between      7
+## 31         mantle,      7
+## 32         mapping      7
+## 33         samples      7
+## 34         erupted      7
+## 35         surface      7
+## 36         partial      7
+## 37         melting      7
+## 38         confirm      7
+## 39         average      7
+## 40          mantle      6
+## 41          mostly      6
+## 42          mantle      6
+## 43          mantle      6
+## 44          Earth.      6
+## 45          thick.      6
+## 46           magma      5
+## 47           ocean      5
+## 48           mafic      5
+## 49           about      5
+## 50           magma      5
+## 51           ocean      5
+## 52           could      5
+## 53           float      5
+## 54           crust      5
+## 55           atop.      5
+## 56           final      5
+## 57           crust      5
+## 58           orbit      5
+## 59           crust      5
+## 60           flood      5
+## 61           lavas      5
+## 62           mafic      5
+## 63           which      5
+## 64           crust      5
+## 65           about      5
+## 66            form      4
+## 67            been      4
+## 68            high      4
+## 69            made      4
+## 70            Moon      4
+## 71            rock      4
+## 72            that      4
+## 73            onto      4
+## 74            more      4
+## 75            than      4
+## 76            that      4
+## 77             had      3
+## 78             (31      3
+## 79             mi)      3
+## 80              on      2
+## 81              50      2</code></pre>
+</div>
+</div>
+<div id="advanced-exercise" class="section level3">
+<h3>Advanced Exercise 💥</h3>
+<div id="extended-exercise" class="section level4">
+<h4>Extended Exercise</h4>
+<p>Imagine you are are a new data science intern at a economic research
+institute. The institute has historical data on names, job titles, and
+employers. The records are stored in an inconsistent format that looks
+like sentences. The institute would like to extract the names, job
+titles, and employers in order to investigate the relationship between
+terminal degrees, job titles, and employers.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a>job_strings <span class="ot">&lt;-</span> <span class="fu">read_lines</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;employees.txt&quot;</span>))</span></code></pre></div>
+<p>Data on employee names, positions, and employers are saved in the
+following format:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="fu">head</span>(job_strings)</span></code></pre></div>
+<pre><code>## [1] &quot;Yandel Erdman is employed as a Clinical biochemist at Jakubowski-Jakubowski&quot;    
+## [2] &quot;Dr. Garland Zboncak is employed as a Public librarian at Sanford-Sanford&quot;       
+## [3] &quot;Sanford-Sanford employs Kelsie Zieme as a Pilot, airline&quot;                       
+## [4] &quot;Dwain Nicolas-Considine is employed as a Broadcast presenter at Sanford-Sanford&quot;
+## [5] &quot;Wuckert Inc employs Con Koch as a Editor, commissioning&quot;                        
+## [6] &quot;Tiera Hauck works as a Seismic interpreter at Olson, Olson and Olson&quot;</code></pre>
+<p><strong>Exercise 1</strong>: There are three formats that the data is
+written in. Please write regular expressions to identify rows that match
+each format. Make sure your regexes do not match other formats as
+well.</p>
+<p><strong>Hint</strong>: When simulating the data, I used the following
+formats:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>formats <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;{name} is employed as a {job} at {company}&quot;</span>,</span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>             <span class="st">&quot;{company} employs {name} as a {job}&quot;</span>,</span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a>             <span class="st">&quot;{name} works as a {job} at {company}&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>formats <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;.+ is employed as a .+ at .+&quot;</span>,</span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>             <span class="st">&quot;.+ employs .+ as a .+&quot;</span>,</span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a>             <span class="st">&quot;.+ works as a .+ at .+&quot;</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a><span class="co"># For the reader:</span></span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a><span class="co"># What does replacing `{name}`, `{company}`, and `{job}` with the `.+`s do?</span></span>
+<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a><span class="co"># It means that the regular expressions will match regardless of the actual values of `{name}`, `{company}`, and `{job}`.</span></span></code></pre></div>
+<p><strong>Exercise 2</strong>: Now write code that takes a dataframe
+<code>job_data</code> with the column <code>job_strings</code> and
+creates a column <code>format</code> to identify which format the row
+uses.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a>job_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(job_strings) <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">format =</span> <span class="fu">case_when</span>(</span>
+<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a>    <span class="fu">str_detect</span>(job_strings, formats[<span class="dv">1</span>]) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb41-4"><a href="#cb41-4" tabindex="-1"></a>    <span class="fu">str_detect</span>(job_strings, formats[<span class="dv">2</span>]) <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb41-5"><a href="#cb41-5" tabindex="-1"></a>    <span class="fu">str_detect</span>(job_strings, formats[<span class="dv">3</span>]) <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb41-6"><a href="#cb41-6" tabindex="-1"></a>  ))</span>
+<span id="cb41-7"><a href="#cb41-7" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" tabindex="-1"></a><span class="fu">count</span>(job_data, format)</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 2
+##   format     n
+##    &lt;dbl&gt; &lt;int&gt;
+## 1      1   158
+## 2      2   169
+## 3      3   173</code></pre>
+<hr />
+<p><strong>Exercise 3</strong>: Now that we know the format of each
+line, we can write regular expressions to extract the name from each
+format. Let’s start with the first format,
+<code>{name} is employed as a {job} at {company}</code>. How can we
+extract job from <code>job_strings</code>?</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a>job_data <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a>  <span class="fu">filter</span>(format <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">job =</span> job_strings <span class="sc">%&gt;%</span></span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a>           <span class="fu">str_remove</span>(<span class="st">&quot; at .+&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a>           <span class="fu">str_remove</span>(<span class="st">&quot;.+ is employed as a&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 158 × 3
+##    job_strings                                                                     format job           
+##    &lt;chr&gt;                                                                            &lt;dbl&gt; &lt;chr&gt;         
+##  1 Yandel Erdman is employed as a Clinical biochemist at Jakubowski-Jakubowski          1 &quot; Clinical bi…
+##  2 Dr. Garland Zboncak is employed as a Public librarian at Sanford-Sanford             1 &quot; Public libr…
+##  3 Dwain Nicolas-Considine is employed as a Broadcast presenter at Sanford-Sanford      1 &quot; Broadcast p…
+##  4 Bert McGlynn is employed as a Interior and spatial designer at Reichel-Reichel       1 &quot; Interior an…
+##  5 Judie Gusikowski is employed as a Administrator, arts at Corwin and Sons             1 &quot; Administrat…
+##  6 Zula Rau is employed as a Land/geomatics surveyor at Jakubowski-Jakubowski           1 &quot; Land/geomat…
+##  7 Buel Hyatt PhD is employed as a Programmer, multimedia at Schroeder Inc              1 &quot; Programmer,…
+##  8 Aliza Sporer-Kris is employed as a Writer at Schroeder Inc                           1 &quot; Writer&quot;     
+##  9 Eleanor Bergnaum-Weissnat is employed as a Counsellor at Jakubowski-Jakubowski       1 &quot; Counsellor&quot; 
+## 10 Dr. Arlene Willms is employed as a Set designer at Olson, Olson and Olson            1 &quot; Set designe…
+## # ℹ 148 more rows</code></pre>
+<p><strong>Exercise 4</strong>: Now write code that does the same thing
+for all three formats stored in <code>job_data$job_strings</code>.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a>job_data <span class="ot">&lt;-</span> job_data <span class="sc">%&gt;%</span></span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">job =</span> <span class="fu">case_when</span>(</span>
+<span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a>    format <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> job_strings <span class="sc">%&gt;%</span></span>
+<span id="cb45-4"><a href="#cb45-4" tabindex="-1"></a>                    <span class="fu">str_remove</span>(<span class="st">&quot; at .+&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb45-5"><a href="#cb45-5" tabindex="-1"></a>                    <span class="fu">str_remove</span>(<span class="st">&quot;.+ is employed as a&quot;</span>),</span>
+<span id="cb45-6"><a href="#cb45-6" tabindex="-1"></a>    format <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="fu">str_remove</span>(job_strings, <span class="st">&quot;.+ employs .+ as a &quot;</span>),</span>
+<span id="cb45-7"><a href="#cb45-7" tabindex="-1"></a>    format <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> job_strings <span class="sc">%&gt;%</span></span>
+<span id="cb45-8"><a href="#cb45-8" tabindex="-1"></a>                    <span class="fu">str_remove</span>(<span class="st">&quot;.+ works as a &quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb45-9"><a href="#cb45-9" tabindex="-1"></a>                    <span class="fu">str_remove</span>(<span class="st">&quot; at .+&quot;</span>)</span>
+<span id="cb45-10"><a href="#cb45-10" tabindex="-1"></a>  ))</span>
+<span id="cb45-11"><a href="#cb45-11" tabindex="-1"></a></span>
+<span id="cb45-12"><a href="#cb45-12" tabindex="-1"></a><span class="co"># Alternatively, you could use `stringr::str_extract()`</span></span>
+<span id="cb45-13"><a href="#cb45-13" tabindex="-1"></a><span class="co"># I used `str_remove()` to make it easier to see what I am doing</span></span></code></pre></div>
+<p><strong>Exercise 5</strong>: Now extract the names from
+<code>job_strings</code>.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>job_data <span class="ot">&lt;-</span> job_data <span class="sc">%&gt;%</span></span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">case_when</span>(</span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>    format <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="fu">str_remove</span>(job_strings, <span class="st">&quot; is employed as a .+ at .+&quot;</span>),</span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a>    format <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> job_strings <span class="sc">%&gt;%</span></span>
+<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a>                    <span class="fu">str_remove</span>(<span class="st">&quot;.+ employs &quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a>                    <span class="fu">str_remove</span>(<span class="st">&quot; as a .+&quot;</span>),</span>
+<span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a>    format <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="fu">str_remove</span>(job_strings, <span class="st">&quot;works as a .+ at .+&quot;</span>)</span>
+<span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a>  ))</span></code></pre></div>
+<p><strong>Exercise 6</strong>: What regular expression could be used to
+identify terminal degrees (PhD, ScD, MD, DDS, DVM) in
+<code>name</code>?</p>
+<p><strong>Hint</strong>: You can create groups in regular expressions
+using parenthesis and use <code>|</code> as an <code>OR</code>
+operator.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a>job_data <span class="ot">&lt;-</span> job_data <span class="sc">%&gt;%</span></span>
+<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">terminal_degree =</span> <span class="fu">str_detect</span>(name, <span class="st">&quot;(DDS)|(MD)|(PhD)|(Dr</span><span class="sc">\\</span><span class="st">.)|(ScD)|(DVM)&quot;</span>))</span></code></pre></div>
+<p><strong>Exercise 7</strong>: Now let’s find the most common jobs held
+by people with advanced degrees.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a>job_data <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a>  <span class="fu">filter</span>(terminal_degree) <span class="sc">%&gt;%</span></span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a>  <span class="fu">count</span>(job) <span class="sc">%&gt;%</span></span>
+<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb48-5"><a href="#cb48-5" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 5 × 2
+##   job                            n
+##   &lt;chr&gt;                      &lt;int&gt;
+## 1 Broadcast presenter            5
+## 2 Physiotherapist                4
+## 3 Editor, commissioning          3
+## 4 Energy engineer                3
+## 5 Horticulturist, commercial     3</code></pre>
+</div>
+<div id="miscellanious-exercises" class="section level4">
+<h4>Miscellanious Exercises</h4>
+<p><strong>Exercise 8</strong>: Why does this code evaluate to
+false?</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="st">&quot;look&quot;</span> <span class="sc">==</span> <span class="st">&quot;lооk&quot;</span></span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<p><strong>Exercise 9</strong>: Look at the <a
+href="https://www.ex-parrot.com/~pdw/Mail-RFC822-Address.html">canonical
+regex for validating email addresses</a> and think about when regexes
+are and are not appropriate. Imagine how complicated this regular
+expression will become once unicode support is added to the email
+address specification.</p>
+<p><strong>Exercise 10</strong> Let’s revisit the regular expression for
+extracting domains from email addresses. How can we rewrite it using
+<code>stringr</code>?</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a>emails <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;person@icloud.com&quot;</span>, <span class="st">&quot;person@gmail.com&quot;</span>, <span class="st">&quot;person@MacBook&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Emails:  person@icloud.com ; person@gmail.com ; person@MacBook&quot;</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="fu">gsub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">.[a-zA-Z]{2,}$&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="fu">gsub</span>(<span class="st">&quot;^.+@&quot;</span>, <span class="st">&quot;&quot;</span>, emails[<span class="fu">grep</span>(<span class="st">&quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+</span><span class="sc">\\</span><span class="st">.[a-zA-Z]{2,}&quot;</span>, emails)]))</span></code></pre></div>
+<pre><code>## [1] &quot;icloud&quot; &quot;gmail&quot;</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a>valid_email <span class="ot">&lt;-</span> <span class="st">&quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+</span><span class="sc">\\</span><span class="st">.[a-zA-Z]{2,}&quot;</span></span>
+<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a>tld <span class="ot">&lt;-</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.[a-zA-Z]{2,}$&quot;</span></span>
+<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a>email_lhs <span class="ot">&lt;-</span> <span class="st">&quot;^.+@&quot;</span></span>
+<span id="cb56-4"><a href="#cb56-4" tabindex="-1"></a></span>
+<span id="cb56-5"><a href="#cb56-5" tabindex="-1"></a>emails <span class="sc">%&gt;%</span></span>
+<span id="cb56-6"><a href="#cb56-6" tabindex="-1"></a>  <span class="fu">str_subset</span>(valid_email) <span class="sc">%&gt;%</span></span>
+<span id="cb56-7"><a href="#cb56-7" tabindex="-1"></a>  <span class="fu">str_remove</span>(tld) <span class="sc">%&gt;%</span></span>
+<span id="cb56-8"><a href="#cb56-8" tabindex="-1"></a>  <span class="fu">str_remove</span>(email_lhs)</span></code></pre></div>
+<pre><code>## [1] &quot;icloud&quot; &quot;gmail&quot;</code></pre>
+<p><strong>Exercise 11</strong> You are now processing log files that
+contain personally identifiable data (PII). Your employer wants you to
+strip out the PII while retaining as much data as possible. Your legal
+team has determined that email domains and internal identifiers like
+<code>UserID</code> should be retained, but they want email addresses
+converted to “user@domain” and credit card numbers replaced with
+“CREDIT-CARD” (Note: we are not using the <a
+href="https://en.wikipedia.org/wiki/Luhn_algorithm">Luhn algorithm</a>
+because it cannot be implemented using regular expressions, so ignore
+the invalid credit card numbers and pretend any 16 digit number is a
+credit card).. Please write code that takes <code>log</code> and returns
+a version without PII.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a>logs <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:34:56 INFO User j.doe@example.com logged in successfully. UserID: 102938&quot;</span>,</span>
+<span id="cb58-3"><a href="#cb58-3" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:35:12 INFO User j.doe@example.com added item to cart. ItemID: 7890&quot;</span>,</span>
+<span id="cb58-4"><a href="#cb58-4" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:36:32 ERROR Payment failed for j.doe@example.com. Error code: 345&quot;</span>,</span>
+<span id="cb58-5"><a href="#cb58-5" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:40:15 INFO User jane.d@example.net logged in successfully. UserID: 475869&quot;</span>,</span>
+<span id="cb58-6"><a href="#cb58-6" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:41:09 INFO User jane.d@example.net made a purchase. OrderID: 192837 with 4000-6000-2023-1900&quot;</span>,</span>
+<span id="cb58-7"><a href="#cb58-7" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:45:23 INFO User bill.gates@microsoft.com logged in successfully. UserID: 918273&quot;</span>,</span>
+<span id="cb58-8"><a href="#cb58-8" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:46:45 INFO User bill.gates@microsoft.com added item to cart. ItemID: 5647&quot;</span>,</span>
+<span id="cb58-9"><a href="#cb58-9" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:50:00 INFO User elon.musk@spacex.com logged in successfully. UserID: 546372&quot;</span>,</span>
+<span id="cb58-10"><a href="#cb58-10" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:50:12 INFO User elon.musk@spacex.com made a purchase. OrderID: 293847 with 4567-1234-1900-2023&quot;</span>,</span>
+<span id="cb58-11"><a href="#cb58-11" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:52:19 ERROR Payment failed for bill.gates@microsoft.com. Error code: 908&quot;</span>,</span>
+<span id="cb58-12"><a href="#cb58-12" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:54:00 INFO User satya.nadella@microsoft.com logged in successfully. UserID: 192847&quot;</span>,</span>
+<span id="cb58-13"><a href="#cb58-13" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:54:56 INFO User satya.nadella@microsoft.com added item to cart. ItemID: 6574&quot;</span>,</span>
+<span id="cb58-14"><a href="#cb58-14" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:58:10 INFO User tim.cook@apple.com logged in successfully. UserID: 109283&quot;</span>,</span>
+<span id="cb58-15"><a href="#cb58-15" tabindex="-1"></a><span class="st">&quot;2021-10-28 12:59:12 INFO User tim.cook@apple.com made a purchase. OrderID: 546372 with gift card 123124123&quot;</span>,</span>
+<span id="cb58-16"><a href="#cb58-16" tabindex="-1"></a><span class="st">&quot;2021-10-28 13:01:25 ERROR Payment failed for satya.nadella@microsoft.com. Error code: 789&quot;</span>,</span>
+<span id="cb58-17"><a href="#cb58-17" tabindex="-1"></a><span class="st">&quot;2021-10-28 13:03:45 INFO User sundar.pichai@google.com logged in successfully. UserID: 546789&quot;</span>,</span>
+<span id="cb58-18"><a href="#cb58-18" tabindex="-1"></a><span class="st">&quot;2021-10-28 13:05:09 INFO User sundar.pichai@google.com made a purchase. OrderID: 908172 with 4321-9876-2000-1009&quot;</span></span>
+<span id="cb58-19"><a href="#cb58-19" tabindex="-1"></a>)</span>
+<span id="cb58-20"><a href="#cb58-20" tabindex="-1"></a><span class="co"># Thank you ChatGPT for generating a first cut of this log data, although I had to manually generate the 16 digit codes and use a jailbreak</span></span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a>valid_email <span class="ot">&lt;-</span> <span class="st">&quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+</span><span class="sc">\\</span><span class="st">.[a-zA-Z]{2,}&quot;</span></span>
+<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a>email_lhs <span class="ot">&lt;-</span> <span class="st">&quot;^.+@&quot;</span></span>
+<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="#cb59-4" tabindex="-1"></a>remove_pii_from_emails <span class="ot">&lt;-</span> <span class="cf">function</span>(string) {</span>
+<span id="cb59-5"><a href="#cb59-5" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">str_detect</span>(string, valid_email)) {</span>
+<span id="cb59-6"><a href="#cb59-6" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">str_replace</span>(string, <span class="st">&quot; .+@&quot;</span>, <span class="st">&quot; user@&quot;</span>))</span>
+<span id="cb59-7"><a href="#cb59-7" tabindex="-1"></a>  }</span>
+<span id="cb59-8"><a href="#cb59-8" tabindex="-1"></a>  <span class="fu">return</span>(string)</span>
+<span id="cb59-9"><a href="#cb59-9" tabindex="-1"></a>}</span>
+<span id="cb59-10"><a href="#cb59-10" tabindex="-1"></a></span>
+<span id="cb59-11"><a href="#cb59-11" tabindex="-1"></a>remove_credit_card_numbers <span class="ot">&lt;-</span> <span class="cf">function</span>(string) {</span>
+<span id="cb59-12"><a href="#cb59-12" tabindex="-1"></a>  <span class="fu">str_replace</span>(string, <span class="st">&quot;[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}&quot;</span>, <span class="st">&quot;CREDIT-CARD&quot;</span>)</span>
+<span id="cb59-13"><a href="#cb59-13" tabindex="-1"></a>}</span>
+<span id="cb59-14"><a href="#cb59-14" tabindex="-1"></a></span>
+<span id="cb59-15"><a href="#cb59-15" tabindex="-1"></a><span class="fu">map_chr</span>(logs, remove_pii_from_emails) <span class="sc">%&gt;%</span></span>
+<span id="cb59-16"><a href="#cb59-16" tabindex="-1"></a>  <span class="fu">map_chr</span>(remove_credit_card_numbers)</span></code></pre></div>
+<pre><code>##  [1] &quot;2021-10-28 user@example.com logged in successfully. UserID: 102938&quot;                 
+##  [2] &quot;2021-10-28 user@example.com added item to cart. ItemID: 7890&quot;                       
+##  [3] &quot;2021-10-28 user@example.com. Error code: 345&quot;                                       
+##  [4] &quot;2021-10-28 user@example.net logged in successfully. UserID: 475869&quot;                 
+##  [5] &quot;2021-10-28 user@example.net made a purchase. OrderID: 192837 with CREDIT-CARD&quot;      
+##  [6] &quot;2021-10-28 user@microsoft.com logged in successfully. UserID: 918273&quot;               
+##  [7] &quot;2021-10-28 user@microsoft.com added item to cart. ItemID: 5647&quot;                     
+##  [8] &quot;2021-10-28 user@spacex.com logged in successfully. UserID: 546372&quot;                  
+##  [9] &quot;2021-10-28 user@spacex.com made a purchase. OrderID: 293847 with CREDIT-CARD&quot;       
+## [10] &quot;2021-10-28 user@microsoft.com. Error code: 908&quot;                                     
+## [11] &quot;2021-10-28 user@microsoft.com logged in successfully. UserID: 192847&quot;               
+## [12] &quot;2021-10-28 user@microsoft.com added item to cart. ItemID: 6574&quot;                     
+## [13] &quot;2021-10-28 user@apple.com logged in successfully. UserID: 109283&quot;                   
+## [14] &quot;2021-10-28 user@apple.com made a purchase. OrderID: 546372 with gift card 123124123&quot;
+## [15] &quot;2021-10-28 user@microsoft.com. Error code: 789&quot;                                     
+## [16] &quot;2021-10-28 user@google.com logged in successfully. UserID: 546789&quot;                  
+## [17] &quot;2021-10-28 user@google.com made a purchase. OrderID: 908172 with CREDIT-CARD&quot;</code></pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
