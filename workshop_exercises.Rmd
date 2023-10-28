@@ -4,8 +4,6 @@ subtitle: "The packages **stringr and stringi**"
 author: "Jackson Luckey, Miriam Runde, Daniel Boppert"
 institute: "Hertie School"
 date: "2023-10-30 (updated: `r Sys.Date()`)"
-params:
-  include_solutions: TRUE
 output:
   html_document:
     toc: TRUE
