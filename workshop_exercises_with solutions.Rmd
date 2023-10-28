@@ -53,36 +53,48 @@ The advanced exercises include the use of Regex expression. `r emo::ji("shocked"
 
 **Exercise 1**: Create two string vectors that say "Today I am gonna learn how to process strings." & "This will be a lot of fun!" `r emo::ji("blush")`
 ```{r}
-
+my_string <- "Today I am gonna learn how to process strings."
+my_string2 <- "This will be a lot of fun!"
 ```
 
 **Exercise 2**: Please extract the component "Science" out of the string "Data Science". `r emo::ji("computer")`
 ```{r}
-
+ds_str <- "Data Science"
+#way 1
+result_2 <- str_sub("DataScience", start = 5, end = 11)
+#way 2
+result_2 <- str_extract(ds_str, "Science")
+result_2
 ```
 
 
 **Exercise 3**: Count the characters in your string from exercise 1. 
 ```{r}
-
+result_3 <- str_length(my_string)  
+result_3
 ```
 
 **Exercise 4**: Please add the first and the second string from exercise 1 together. Be minjob_dataul about the whitespace behind the first senctence.
 ```{r}
-
+todays_motto<- str_c(my_string, " ", my_string2)
+todays_motto
 ```
 
 
 **Exercise 5**: For some task, we need all the characters to be in lowercase - for example, if we want to count specific words and do not want to include the lower- and the uppercase version of a specific word. 
 From now on, please use the lower case version of our motto. 
 ```{r}
-
+todays_motto_lc <- str_to_lower(todays_motto)
+todays_motto_lc
 ```
 
 
 **Exercise 6**: Check if the word "horror" is in the each of the concatenated string. Do it for "fun" also. `r emo::ji("sunglasses")`
 ```{r}
-
+str_detect(todays_motto_lc, "horror")
+#As you see, the function does not detect any horror in todays motto. 
+str_detect(todays_motto_lc, "fun")
+#It just detects fun!
 ```
 
 
@@ -116,7 +128,12 @@ print(moon_facts)
 **Hint**: What do we see when we take a look at the paragraph? The string vector also contains the reference numbers ([89], [99]). `r emo::ji("sad")`.   
 If we want to extract only the sentences that contain numerical information about the moon, we need to get rid of the reference numbers. 
 ```{r}
+moon_facts_clean <- str_replace_all(moon_facts, "\\[\\d+\\]", "")
+moon_facts_clean
 
+#subset all sentences that contain numerical info
+sentences_with_numbers <- str_subset(unlist(str_split(moon_facts_clean, "(?<=\\.)\\s+")), "\\d+") 
+sentences_with_numbers
 ```
 
 
@@ -124,12 +141,29 @@ If we want to extract only the sentences that contain numerical information abou
 **Hint**: The filler worlds "the, a,  and" are slowing down any further operations. Let's get rid of them before we are performing the length analysis. `r emo::ji("information_desk_person")` 
 
 ```{r}
+filler_words <- c("of", "and", "a", "the", "in", "is", "with", "from", "into", "this", "after", "to", "would", "have", "The")
 
+pattern <- paste("\\b(", paste(filler_words, collapse = "|"), ")\\b")
+
+cleaned_text <- str_replace_all(moon_facts_clean, pattern, "")
+
+# Trim the resultant strings to get rid of any additional spaces
+cleaned_text <- str_trim(str_replace_all(cleaned_text, "\\s+", " "))
+
+cleaned_text
 ```
 
 
 
 ```{r}
+cleaned_text_split <- unlist(str_split(cleaned_text, "\\s+"))
+strings_length <- str_length(cleaned_text_split)
+
+
+lengths <- data.frame(Word = cleaned_text_split, Length = strings_length)
+result <- lengths %>% arrange(desc(Length))
+result
+
 
 ```
 
@@ -181,10 +215,15 @@ There are three formats that the data is written in. Please write regular expres
 When simulating the data, I used the following formats:
 
 ```{r include=TRUE}
-
+formats <- c("{name} is employed as a {job} at {company}",
+             "{company} employs {name} as a {job}",
+             "{name} works as a {job} at {company}")
 ```
 
 ```{r}
+formats <- c(".+ is employed as a .+ at .+",
+             ".+ employs .+ as a .+",
+             ".+ works as a .+ at .+")
 
 # For the reader:
 # What does replacing `{name}`, `{company}`, and `{job}` with the `.+`s do?
@@ -197,7 +236,14 @@ When simulating the data, I used the following formats:
 Now write code that takes a dataframe `job_data` with the column `job_strings` and creates a column `format` to identify which format the row uses.
 
 ```{r}
+job_data <- tibble(job_strings) %>%
+  mutate(format = case_when(
+    str_detect(job_strings, formats[1]) ~ 1,
+    str_detect(job_strings, formats[2]) ~ 2,
+    str_detect(job_strings, formats[3]) ~ 3,
+  ))
 
+count(job_data, format)
 ```
 
 ---
@@ -213,5 +259,9 @@ Let's start with the first format:
 How can we extract job?
 
 ```{r}
-
+job_data %>%
+  filter(format == 1) %>%
+  mutate(job = job_strings %>%
+           str_remove(" at .+") %>%
+           str_remove(".+ is employed as a"))
 ```
