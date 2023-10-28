@@ -357,7 +357,7 @@ job_data %>%
 "look" == "lооk"
 ```
 
-**Exercise 9**: Look at the [canonical regex for validating email addresses](https://www.ex-parrot.com/~pdw/Mail-RFC822-Address.html) and think about when regexes are and are not appropriate.
+**Exercise 9**: Look at the [canonical regex for validating email addresses](https://www.ex-parrot.com/~pdw/Mail-RFC822-Address.html) and think about when regexes are and are not appropriate. Imagine how complicated this regular expression will become once unicode support is added to the email address specification.
 
 **Exercise 10** Let's revisit the regular expression for extracting domains from email addresses. How can we rewrite it using `stringr`?
 
@@ -385,16 +385,48 @@ emails %>%
   str_remove(email_lhs)
 ```
 
-**Exercise 11** You are now processing 
+**Exercise 11** You are now processing log files that contain personally identifiable data (PII). Your employer wants you to strip out the PII while retaining as much data as possible. Your legal team has determined that email domains and internal identifiers like `UserID` should be retained, but they want email addresses converted to "user\@domain" and credit card numbers replaced with "CREDIT-CARD" (Note: we are not using the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm) because it cannot be implemented using regular expressions, so ignore the invalid credit card numbers and pretend any 16 digit number is a credit card).. Please write code that takes `log` and returns a version without PII.
+
+```{r include=TRUE}
+logs <- c(
+"2021-10-28 12:34:56 INFO User j.doe@example.com logged in successfully. UserID: 102938",
+"2021-10-28 12:35:12 INFO User j.doe@example.com added item to cart. ItemID: 7890",
+"2021-10-28 12:36:32 ERROR Payment failed for j.doe@example.com. Error code: 345",
+"2021-10-28 12:40:15 INFO User jane.d@example.net logged in successfully. UserID: 475869",
+"2021-10-28 12:41:09 INFO User jane.d@example.net made a purchase. OrderID: 192837 with 4000-6000-2023-1900",
+"2021-10-28 12:45:23 INFO User bill.gates@microsoft.com logged in successfully. UserID: 918273",
+"2021-10-28 12:46:45 INFO User bill.gates@microsoft.com added item to cart. ItemID: 5647",
+"2021-10-28 12:50:00 INFO User elon.musk@spacex.com logged in successfully. UserID: 546372",
+"2021-10-28 12:50:12 INFO User elon.musk@spacex.com made a purchase. OrderID: 293847 with 4567-1234-1900-2023",
+"2021-10-28 12:52:19 ERROR Payment failed for bill.gates@microsoft.com. Error code: 908",
+"2021-10-28 12:54:00 INFO User satya.nadella@microsoft.com logged in successfully. UserID: 192847",
+"2021-10-28 12:54:56 INFO User satya.nadella@microsoft.com added item to cart. ItemID: 6574",
+"2021-10-28 12:58:10 INFO User tim.cook@apple.com logged in successfully. UserID: 109283",
+"2021-10-28 12:59:12 INFO User tim.cook@apple.com made a purchase. OrderID: 546372 with gift card 123124123",
+"2021-10-28 13:01:25 ERROR Payment failed for satya.nadella@microsoft.com. Error code: 789",
+"2021-10-28 13:03:45 INFO User sundar.pichai@google.com logged in successfully. UserID: 546789",
+"2021-10-28 13:05:09 INFO User sundar.pichai@google.com made a purchase. OrderID: 908172 with 4321-9876-2000-1009"
+)
+# Thank you ChatGPT for generating a first cut of this log data, although I had to manually generate the 16 digit codes and use a jailbreak
+```
 
 ```{r}
-credit_card_numbers <- c(
-  "4000-2345-1234-9876",
-  "2000123678452758",
-  "10-30-2023",
-  "4444 6666 8888 0302",
-  ""
-)
-visa_regex <- "^4[0–9]{12}(?:[0–9]{3})?$"
+valid_email <- "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+email_lhs <- "^.+@"
+
+remove_pii_from_emails <- function(string) {
+  if (str_detect(string, valid_email)) {
+    return(str_replace(string, " .+@", " user@"))
+  }
+  return(string)
+}
+
+remove_credit_card_numbers <- function(string) {
+  str_replace(string, "[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}", "CREDIT-CARD")
+}
+
+map_chr(logs, remove_pii_from_emails) %>%
+  map_chr(remove_credit_card_numbers)
 ```
+
 
