@@ -139,30 +139,7 @@ If we want to extract only the sentences that contain numerical information abou
 
 Imagine you are are a new data science intern at a economic research institute. The institute has historical data on names, job titles, and employers. The records are stored in an inconsistent format that looks like sentences. The institute would like to extract the names, job titles, and employers in order to investigate the relationship between terminal degrees, job titles, and employers.
 
-```{r eval=FALSE,include=FALSE,echo=FALSE}
-set.seed(2023)
-
-companies <- charlatan::ch_company(n = 10)
-jobs <- charlatan::ch_job(n = 100)
-names <- charlatan::ch_name(n = 500)
-
-jobs_job_data <- tibble(
-  name = names,
-  job = sample(jobs, 500, replace = TRUE),
-  company = sample(companies, 500, replace = TRUE),
-  format = sample(c(1,2,3), 500, replace = TRUE)
-) %>%
-  mutate(string = case_when(
-    format == 1 ~ glue("{name} is employed as a {job} at {company}"),
-    format == 2 ~ glue("{company} employs {name} as a {job}"),
-    format == 3 ~ glue("{name} works as a {job} at {company}")
-  ))
-
-write(jobs_job_data$string, here("data", "employees.txt"))
-rm(companies, jobs, names, jobs_job_data)
-```
-
-```{r}
+```{r, include=FALSE}
 job_strings <- read_lines(here("data", "employees.txt"))
 ```
 
@@ -185,7 +162,6 @@ When simulating the data, I used the following formats:
 ```
 
 ```{r}
-
 # For the reader:
 # What does replacing `{name}`, `{company}`, and `{job}` with the `.+`s do?
 #
@@ -210,7 +186,7 @@ Let's start with the first format:
 
 `{name} is employed as a {job} at {company}`
 
-How can we extract job?
+How can we extract name?
 
 ```{r}
 
