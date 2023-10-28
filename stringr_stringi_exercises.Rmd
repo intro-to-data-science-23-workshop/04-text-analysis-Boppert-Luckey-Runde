@@ -353,9 +353,48 @@ job_data %>%
 
 **Exercise 8**: Why does this code evaluate to false?
 
-```{r}
+```{r include=TRUE}
 "look" == "lооk"
 ```
 
-**Exercise 9**: Look at the [canonical regex for validating email addresses](https://www.ex-parrot.com/~pdw/Mail-RFC822-Address.html) and think about when regexes are and are not appropiate.
+**Exercise 9**: Look at the [canonical regex for validating email addresses](https://www.ex-parrot.com/~pdw/Mail-RFC822-Address.html) and think about when regexes are and are not appropriate.
+
+**Exercise 10** Let's revisit the regular expression for extracting domains from email addresses. How can we rewrite it using `stringr`?
+
+```{r}
+emails <- c("person@icloud.com", "person@gmail.com", "person@MacBook")
+
+```
+
+```{r echo=FALSE, include=TRUE}
+paste("Emails: ", paste(emails, collapse = " ; "))
+```
+
+```{r include=TRUE}
+gsub("\\.[a-zA-Z]{2,}$", "", gsub("^.+@", "", emails[grep("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}", emails)]))
+```
+
+```{r}
+valid_email <- "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+tld <- "\\.[a-zA-Z]{2,}$"
+email_lhs <- "^.+@"
+
+emails %>%
+  str_subset(valid_email) %>%
+  str_remove(tld) %>%
+  str_remove(email_lhs)
+```
+
+**Exercise 11** You are now processing 
+
+```{r}
+credit_card_numbers <- c(
+  "4000-2345-1234-9876",
+  "2000123678452758",
+  "10-30-2023",
+  "4444 6666 8888 0302",
+  ""
+)
+visa_regex <- "^4[0–9]{12}(?:[0–9]{3})?$"
+```
 
