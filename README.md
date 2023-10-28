@@ -7,20 +7,27 @@ This repository provides materials for a session that is part of the [I2DS Tools
 
 ### Session contents
 
-- [Slides](https://github.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/blob/main/presentation.html)
-- [Exercises](https://github.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/blob/main/stringr_stringi_exercises.html)
-- [Exercises With Solutions](https://github.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/blob/main/stringr_stringi_exercises_with_solutions.html)
+- [Slides](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/presentation.html)
+- [Workshop Exercises](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/workshop_exercises.html)
+- [Workshop Exercises with solution](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/workshop_exercises_with_solutions.html)
+- [Learning Material](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/stringr_stringi_exercises_with_solutions.html)
+- [Learning Material with Solutions](https://raw.githack.com/intro-to-data-science-23-workshop/04-text-analysis-Boppert-Luckey-Runde/main/stringr_stringi_exercises_with_solutions.html)
 
 ### Main learning objectives
 
 The primary goal of this tutorial is to introduce students to the `stringr` and `stringi` packages and practice processing text data. We will start by doing an overview of text data in R, and then move onto comparing `stringr` to `stringi`. We will then work through some exercises to get practice with `stringr`.
 
-
 ## Instructors
 
+<<<<<<< HEAD
 - Daniel Boppert [LinkedIn](https://www.linkedin.com/in/daniel-boppert-93a561184/), [GitHub](https://github.com/bprtdaniel))
 - Miriam Runde [LinkedIn](https://www.linkedin.com/in/miriamrunde/), [GitHub]((https://github.com/MiriamRunde))
 - Jackson Luckey ([LinkedIn](https://www.linkedin.com/in/jacksonmluckey/), [GitHub]((https://github.com/jacksonmluckey))
+=======
+- Daniel Boppert ([LinkedIn](https://www.linkedin.com/in/daniel-boppert-93a561184/), [GitHub](https://github.com/bprtdaniel))
+- Miriam Runde ([LinkedIn](https://www.linkedin.com/in/miriamrunde/), [GitHub](https://github.com/MiriamRunde))
+- Jackson Luckey ([LinkedIn](https://www.linkedin.com/in/jacksonmluckey/), [GitHub](https://github.com/jacksonmluckey))
+>>>>>>> origin/main
 
 
 ## Further resources
@@ -28,6 +35,7 @@ The primary goal of this tutorial is to introduce students to the `stringr` and 
 - [stringr Cheat Sheet](https://dplyr.tidyverse.org/)
 - [Data-Quest course on string processing](https://www.dataquest.io/course/r-data-cleaning-advanced/)
 - [R for Data Science book - part on string processing](https://r4ds.had.co.nz/wrangle-intro.html)
+- [Mastering Regular Expressions](https://www.oreilly.com/library/view/mastering-regular-expressions/0596528124/) -- Jackson cannot recommend this book enough
   
 ## License
 
@@ -37,6 +45,6 @@ The material in this repository is made available under the [MIT license](http:/
 
 **Daniel Boppert** prepared the RMD presentation, parts of the session contents, and one-half of the recording.
 
-**Miriam Runde** prepared the practice material (Beginner and Intermediate), parts of the session contents, and the other half of the recording. 
+**Miriam Runde** prepared part of the practice material (Beginner and Intermediate), parts of the session contents, and the other half of the recording. 
 
-**Jackson Luckey** prepared a part of the practice material (advanced) and the [the alternative presentation, which contains more .
+**Jackson Luckey** prepared a part of the practice material (Advanced) and miscellaneous components (exercises with and without solutions, first draft of alternative presentation).

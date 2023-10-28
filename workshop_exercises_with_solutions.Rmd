@@ -1,0 +1,267 @@
+---
+title: "String processing in R"
+subtitle: "The packages **stringr and stringi**"
+author: "Jackson Luckey, Miriam Runde, Daniel Boppert"
+institute: "Hertie School"
+date: "2023-10-30 (updated: `r Sys.Date()`)"
+params:
+  include_solutions: TRUE
+output:
+  html_document:
+    toc: TRUE
+    job_data_print: paged
+    number_sections: FALSE
+    highlight: tango
+    theme: lumen 
+    toc_depth: 3
+    toc_float: true
+    css: custom.css 
+    self_contained: false
+    
+---
+
+```{r, setup, include=FALSE}
+library(tidyverse)
+library(glue)
+library(here)
+library(rvest)
+
+if (!(params$include_solutions)) {
+  knitr::opts_chunk$set(
+    include = FALSE
+  )
+}
+```
+
+# Welcome to our workshop! `r emo::ji("wave")`
+
+Lets do some string manipulation together!
+
+## Notes on the practice sheet 
+
+Make sure to load the **stringr**, **stringi**  and the **regex** package. 
+
+We are going through different levels of difficulty in string manipulation.  
+The first exercises will consist of straight forward application of some of the main functions of the **stringr** and the **stringi** package.  
+In the medium level, we will deal with more complex tasks that involve string manipulation.  
+The advanced exercises include the use of Regex expression. `r emo::ji("shocked")`
+
+
+## Exercises 
+
+### Beginner exercises `r emo::ji("nerd")`
+
+**Exercise 1**: Create two string vectors that say "Today I am gonna learn how to process strings." & "This will be a lot of fun!" `r emo::ji("blush")`
+```{r}
+my_string <- "Today I am gonna learn how to process strings."
+my_string2 <- "This will be a lot of fun!"
+```
+
+**Exercise 2**: Please extract the component "Science" out of the string "Data Science". `r emo::ji("computer")`
+```{r}
+ds_str <- "Data Science"
+#way 1
+result_2 <- str_sub("DataScience", start = 5, end = 11)
+#way 2
+result_2 <- str_extract(ds_str, "Science")
+result_2
+```
+
+
+**Exercise 3**: Count the characters in your string from exercise 1. 
+```{r}
+result_3 <- str_length(my_string)  
+result_3
+```
+
+**Exercise 4**: Please add the first and the second string from exercise 1 together. Be minjob_dataul about the whitespace behind the first senctence.
+```{r}
+todays_motto<- str_c(my_string, " ", my_string2)
+todays_motto
+```
+
+
+**Exercise 5**: For some task, we need all the characters to be in lowercase - for example, if we want to count specific words and do not want to include the lower- and the uppercase version of a specific word. 
+From now on, please use the lower case version of our motto. 
+```{r}
+todays_motto_lc <- str_to_lower(todays_motto)
+todays_motto_lc
+```
+
+
+**Exercise 6**: Check if the word "horror" is in the each of the concatenated string. Do it for "fun" also. `r emo::ji("sunglasses")`
+```{r}
+str_detect(todays_motto_lc, "horror")
+#As you see, the function does not detect any horror in todays motto. 
+str_detect(todays_motto_lc, "fun")
+#It just detects fun!
+```
+
+
+
+### Medium difficulty exercises `r emo::ji("fox")`
+
+In this part, we will show how to create a function with stringr and stringi. Creating a function for string processing can be helpful if you want to execute the same manipulation on a lot of different character vectors, for example tweets or sentences in a sentiment analysis. `r emo::ji("dove")`. 
+The rest of the exercises the manipulation and analysis of webscraped data from Wikipedia.`r emo::ji("speech_balloon")`
+
+
+#### Webscraping exercises
+For thes following exercises, we first need some strings we can process. 
+We prepared a short scraping code to get data from a Wikipedia page. 
+Please run the code - then we can start with the string processing. 
+
+
+**Webscraper**
+
+```{r}
+moon_url <- read_html("https://en.wikipedia.org/wiki/Moon")
+
+moon_facts <- moon_url %>% 
+  html_element(xpath = '//p[(((count(preceding-sibling::*) + 1) = 55) and parent::*)] | //p[(((count(preceding-sibling::*) + 1) = 74) and parent::*)] | //p[(((count(preceding-sibling::*) + 1) = 73) and parent::*)] | //p[(((count(preceding-sibling::*) + 1) = 72) and parent::*)]') %>%  
+  html_text()
+  
+print(moon_facts)
+```
+
+**Exercise 7**: We are only interested in any information about the moon that includes numbers - the size, the thickness, anything related to numbers. How can we do that with the stringr package?  
+
+**Hint**: What do we see when we take a look at the paragraph? The string vector also contains the reference numbers ([89], [99]). `r emo::ji("sad")`.   
+If we want to extract only the sentences that contain numerical information about the moon, we need to get rid of the reference numbers. 
+```{r}
+moon_facts_clean <- str_replace_all(moon_facts, "\\[\\d+\\]", "")
+moon_facts_clean
+
+#subset all sentences that contain numerical info
+sentences_with_numbers <- str_subset(unlist(str_split(moon_facts_clean, "(?<=\\.)\\s+")), "\\d+") 
+sentences_with_numbers
+```
+
+
+**Exercise 7**: For this exercise, we are interested in the length of the different words in the paragraph to proof that science word are super long `r emo::ji("shocked")`!  
+**Hint**: The filler worlds "the, a,  and" are slowing down any further operations. Let's get rid of them before we are performing the length analysis. `r emo::ji("information_desk_person")` 
+
+```{r}
+filler_words <- c("of", "and", "a", "the", "in", "is", "with", "from", "into", "this", "after", "to", "would", "have", "The")
+
+pattern <- paste("\\b(", paste(filler_words, collapse = "|"), ")\\b")
+
+cleaned_text <- str_replace_all(moon_facts_clean, pattern, "")
+
+# Trim the resultant strings to get rid of any additional spaces
+cleaned_text <- str_trim(str_replace_all(cleaned_text, "\\s+", " "))
+
+cleaned_text
+```
+
+
+
+```{r}
+cleaned_text_split <- unlist(str_split(cleaned_text, "\\s+"))
+strings_length <- str_length(cleaned_text_split)
+
+
+lengths <- data.frame(Word = cleaned_text_split, Length = strings_length)
+result <- lengths %>% arrange(desc(Length))
+result
+
+
+```
+
+
+
+### Advanced Exercise `r emo::ji("boom")`
+
+Imagine you are are a new data science intern at a economic research institute. The institute has historical data on names, job titles, and employers. The records are stored in an inconsistent format that looks like sentences. The institute would like to extract the names, job titles, and employers in order to investigate the relationship between terminal degrees, job titles, and employers.
+
+```{r eval=FALSE,include=FALSE,echo=FALSE}
+set.seed(2023)
+
+companies <- charlatan::ch_company(n = 10)
+jobs <- charlatan::ch_job(n = 100)
+names <- charlatan::ch_name(n = 500)
+
+jobs_job_data <- tibble(
+  name = names,
+  job = sample(jobs, 500, replace = TRUE),
+  company = sample(companies, 500, replace = TRUE),
+  format = sample(c(1,2,3), 500, replace = TRUE)
+) %>%
+  mutate(string = case_when(
+    format == 1 ~ glue("{name} is employed as a {job} at {company}"),
+    format == 2 ~ glue("{company} employs {name} as a {job}"),
+    format == 3 ~ glue("{name} works as a {job} at {company}")
+  ))
+
+write(jobs_job_data$string, here("data", "employees.txt"))
+rm(companies, jobs, names, jobs_job_data)
+```
+
+```{r}
+job_strings <- read_lines(here("data", "employees.txt"))
+```
+
+Data on employee names, positions, and employers are saved in the following format:
+
+```{r include=TRUE}
+head(job_strings)
+```
+
+**Exercise 1**
+
+There are three formats that the data is written in. Please write regular expressions to identify rows that match each format. Make sure your regexes do not match other formats as well.
+
+**Hint**
+
+When simulating the data, I used the following formats:
+
+```{r include=TRUE}
+formats <- c("{name} is employed as a {job} at {company}",
+             "{company} employs {name} as a {job}",
+             "{name} works as a {job} at {company}")
+```
+
+```{r}
+formats <- c(".+ is employed as a .+ at .+",
+             ".+ employs .+ as a .+",
+             ".+ works as a .+ at .+")
+
+# For the reader:
+# What does replacing `{name}`, `{company}`, and `{job}` with the `.+`s do?
+#
+# It means that the regular expressions will match regardless of the actual values of `{name}`, `{company}`, and `{job}`.
+```
+
+**Exercise 2**
+
+Now write code that takes a dataframe `job_data` with the column `job_strings` and creates a column `format` to identify which format the row uses.
+
+```{r}
+job_data <- tibble(job_strings) %>%
+  mutate(format = case_when(
+    str_detect(job_strings, formats[1]) ~ 1,
+    str_detect(job_strings, formats[2]) ~ 2,
+    str_detect(job_strings, formats[3]) ~ 3,
+  ))
+
+count(job_data, format)
+```
+
+---
+
+**Exercise 3**
+
+Now that we know the format of each line, we can write regular expressions to extract the name from each format.
+
+Let's start with the first format:
+
+`{name} is employed as a {job} at {company}`
+
+How can we extract job?
+
+```{r}
+job_data %>%
+  filter(format == 1) %>%
+  mutate(job = job_strings %>%
+           str_remove(" at .+") %>%
+           str_remove(".+ is employed as a"))
+```
